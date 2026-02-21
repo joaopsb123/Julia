@@ -12,7 +12,7 @@ class handler(BaseHTTPRequestHandler):
         
         try:
             # Buscar todos os usuários
-            firebase_url = "https://bot-discord-4d74d-default-rtdb.firebaseio.com/users.json"
+            firebase_url = "https://bot-discord-4d74d-default-rtdb.firebaseio.com/"
             
             req = urllib.request.Request(firebase_url)
             req.add_header('Content-Type', 'application/json')
