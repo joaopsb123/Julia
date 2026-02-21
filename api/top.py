@@ -1,16 +1,6 @@
 from http.server import BaseHTTPRequestHandler
 import json
-import firebase_admin
-from firebase_admin import db
-import os
-
-FIREBASE_CONFIG = {
-    "databaseURL": "https://bot-discord-4d74d-default-rtdb.firebaseio.com/",
-    "projectId": "bot-discord-4d74d"
-}
-
-if not firebase_admin._apps:
-    firebase_admin.initialize_app(options=FIREBASE_CONFIG)
+import urllib.request
 
 class handler(BaseHTTPRequestHandler):
     def do_GET(self):
@@ -20,29 +10,24 @@ class handler(BaseHTTPRequestHandler):
         self.end_headers()
         
         try:
-            users_ref = db.reference('/users').get()
-            if not users_ref:
-                self.wfile.write(json.dumps([]).encode())
-                return
+            # Buscar todos os usuários do Firebase
+            url = "https://bot-discord-4d74d-default-rtdb.firebaseio.com/users.json"
+            response = urllib.request.urlopen(url)
+            data = response.read().decode()
+            users_data = json.loads(data) if data != 'null' else {}
             
             users_list = []
-            for user_id, user_data in users_ref.items():
-                if user_data and user_data.get('username'):
+            for user_id, user in users_data.items():
+                if user and user.get('username'):
                     users_list.append({
-                        'username': user_data['username'],
-                        'balance': user_data.get('balance', 0)
+                        'username': user['username'],
+                        'balance': user.get('balance', 0)
                     })
             
-            # Ordenar e limitar
+            # Ordenar por saldo
             users_list.sort(key=lambda x: x['balance'], reverse=True)
+            
             self.wfile.write(json.dumps(users_list[:10]).encode())
             
         except Exception as e:
             self.wfile.write(json.dumps([]).encode())
-    
-    def do_OPTIONS(self):
-        self.send_response(200)
-        self.send_header('Access-Control-Allow-Origin', '*')
-        self.send_header('Access-Control-Allow-Methods', 'GET, OPTIONS')
-        self.send_header('Access-Control-Allow-Headers', 'Content-Type')
-        self.end_headers()
