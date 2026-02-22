@@ -1,61 +1,95 @@
-// netlify/functions/claim.js
-const { Blobs } = require('@netlify/blobs');
+const admin = require('firebase-admin');
 
+if (!admin.apps.length) {
+    admin.initializeApp({
+        credential: admin.credential.cert({
+            projectId: process.env.FIREBASE_PROJECT_ID,
+            clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+            privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n')
+        }),
+        databaseURL: process.env.FIREBASE_DATABASE_URL || "https://bot-discord-4d74d-default-rtdb.firebaseio.com"
+    });
+}
+
+const db = admin.database();
 const DAILY_AMOUNT = 100;
 
 exports.handler = async (event) => {
     const headers = {
         'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': 'Content-Type',
+        'Access-Control-Allow-Methods': 'POST, OPTIONS',
         'Content-Type': 'application/json'
     };
 
+    if (event.httpMethod === 'OPTIONS') {
+        return { statusCode: 204, headers, body: '' };
+    }
+
     try {
         const { userId, username } = JSON.parse(event.body);
-        const userStore = Blobs.store('users');
-        
-        let user = await userStore.get(userId, { type: 'json' });
+
+        if (!userId) {
+            return {
+                statusCode: 400,
+                headers,
+                body: JSON.stringify({ 
+                    success: false, 
+                    message: 'ID não fornecido' 
+                })
+            };
+        }
+
+        const userRef = db.ref(`users/${userId}`);
+        const snapshot = await userRef.once('value');
+        let user = snapshot.val();
         const now = new Date();
 
         if (!user) {
+            // Criar novo usuário
             user = {
                 user_id: userId,
                 username: username || 'Usuário',
                 balance: 0,
                 last_daily: null,
                 total_earned: 0,
-                daily_streak: 0
+                daily_streak: 0,
+                created_at: now.toISOString()
             };
         }
 
         // Verificar se já resgatou hoje
         if (user.last_daily) {
-            const last = new Date(user.last_daily);
-            const diff = (now - last) / 1000;
-            if (diff < 86400) {
+            const lastDaily = new Date(user.last_daily);
+            const timeDiff = (now - lastDaily) / 1000; // segundos
+            
+            if (timeDiff < 86400) { // 24 horas
                 return {
                     statusCode: 200,
                     headers,
                     body: JSON.stringify({
                         success: false,
-                        message: '⏰ Já resgatou hoje!'
+                        message: '⏰ Você já resgatou hoje!',
+                        timeLeft: 86400 - timeDiff
                     })
                 };
             }
         }
 
-        // Calcular streak e bônus
+        // Calcular streak
         let streak = 1;
         if (user.last_daily) {
             const last = new Date(user.last_daily);
-            const hours = (now - last) / (1000 * 60 * 60);
-            streak = hours < 48 ? (user.daily_streak || 0) + 1 : 1;
+            const hoursSince = (now - last) / (1000 * 60 * 60);
+            streak = hoursSince < 48 ? (user.daily_streak || 0) + 1 : 1;
         }
 
+        // Calcular bônus (até 70%)
         const bonus = 1 + (Math.min(streak, 7) * 0.1);
         const amount = Math.floor(DAILY_AMOUNT * bonus);
 
         // Atualizar usuário
-        user = {
+        const updatedUser = {
             ...user,
             username: username || user.username,
             balance: (user.balance || 0) + amount,
@@ -64,7 +98,8 @@ exports.handler = async (event) => {
             total_earned: (user.total_earned || 0) + amount
         };
 
-        await userStore.set(userId, JSON.stringify(user));
+        // Salvar no Firebase
+        await userRef.set(updatedUser);
 
         return {
             statusCode: 200,
@@ -73,15 +108,19 @@ exports.handler = async (event) => {
                 success: true,
                 amount,
                 streak,
-                message: `🎉 Ganhou ${amount} moedas!`
+                newBalance: updatedUser.balance,
+                message: `🎉 Ganhou ${amount} moedas! Streak: ${streak}`
             })
         };
+
     } catch (error) {
+        console.error('Erro na função claim:', error);
         return {
             statusCode: 500,
             headers,
             body: JSON.stringify({ 
                 success: false, 
+                message: 'Erro ao processar resgate',
                 error: error.message 
             })
         };
