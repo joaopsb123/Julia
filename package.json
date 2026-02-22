@@ -1,0 +1,8 @@
+{
+  "name": "julia-site",
+  "version": "1.0.0",
+  "description": "Site de resgate diário",
+  "dependencies": {
+    "node-fetch": "^2.6.7"
+  }
+}
