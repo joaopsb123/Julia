@@ -1,6 +1,3 @@
-const fetch = require('node-fetch');
-
-const FIREBASE_URL = 'https://bot-discord-4d74d-default-rtdb.firebaseio.com';
 const DAILY_AMOUNT = 100;
 
 exports.handler = async (event) => {
@@ -12,27 +9,35 @@ exports.handler = async (event) => {
     };
 
     if (event.httpMethod === 'OPTIONS') {
-        return { statusCode: 200, headers, body: '' };
+        return { statusCode: 204, headers, body: '' };
     }
 
     try {
+        const { Blobs } = require('@netlify/blobs');
         const { userId, username } = JSON.parse(event.body);
 
         if (!userId) {
             return {
                 statusCode: 400,
                 headers,
-                body: JSON.stringify({ success: false, message: 'ID não fornecido' })
+                body: JSON.stringify({ 
+                    success: false, 
+                    message: 'ID não fornecido' 
+                })
             };
         }
 
-        // Buscar usuário
-        const userRes = await fetch(`${FIREBASE_URL}/users/${userId}.json`);
-        let user = await userRes.json();
+        // Conectar ao store
+        const userStore = Blobs.store('users');
+        
+        // Buscar usuário existente
+        let user = await userStore.get(userId, { type: 'json' });
         const now = new Date();
 
         if (!user) {
+            // Criar novo usuário
             user = {
+                user_id: userId,
                 username: username || 'Usuário',
                 balance: 0,
                 last_daily: null,
@@ -45,9 +50,9 @@ exports.handler = async (event) => {
         // Verificar se já resgatou hoje
         if (user.last_daily) {
             const lastDaily = new Date(user.last_daily);
-            const timeDiff = (now - lastDaily) / 1000; // em segundos
+            const timeDiff = (now - lastDaily) / 1000; // segundos
             
-            if (timeDiff < 86400) {
+            if (timeDiff < 86400) { // 24h em segundos
                 return {
                     statusCode: 200,
                     headers,
@@ -68,7 +73,7 @@ exports.handler = async (event) => {
             streak = hoursSince < 48 ? (user.daily_streak || 0) + 1 : 1;
         }
 
-        // Calcular bônus
+        // Calcular bônus (até 70%)
         const bonus = 1 + (Math.min(streak, 7) * 0.1);
         const amount = Math.floor(DAILY_AMOUNT * bonus);
 
@@ -82,11 +87,8 @@ exports.handler = async (event) => {
             total_earned: (user.total_earned || 0) + amount
         };
 
-        // Salvar no Firebase
-        await fetch(`${FIREBASE_URL}/users/${userId}.json`, {
-            method: 'PUT',
-            body: JSON.stringify(updatedUser)
-        });
+        // Salvar no Blobs
+        await userStore.set(userId, JSON.stringify(updatedUser));
 
         return {
             statusCode: 200,
@@ -95,15 +97,20 @@ exports.handler = async (event) => {
                 success: true,
                 amount,
                 streak,
+                newBalance: updatedUser.balance,
                 message: `🎉 Ganhou ${amount} moedas! Streak: ${streak}`
             })
         };
 
     } catch (error) {
+        console.error('Erro claim:', error);
         return {
             statusCode: 500,
             headers,
-            body: JSON.stringify({ success: false, error: error.message })
+            body: JSON.stringify({ 
+                success: false, 
+                message: 'Erro ao processar resgate' 
+            })
         };
     }
 };
