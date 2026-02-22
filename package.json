@@ -1,8 +1,8 @@
 {
   "name": "julia-site",
   "version": "1.0.0",
-  "description": "Site de resgate diário",
+  "description": "Site de resgate diário com Netlify Blobs",
   "dependencies": {
-    "node-fetch": "^2.6.7"
+    "@netlify/blobs": "^6.0.0"
   }
 }
