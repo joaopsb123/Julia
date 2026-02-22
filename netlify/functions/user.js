@@ -1,18 +1,13 @@
-// Função para buscar usuário no Netlify Blobs
+// netlify/functions/user.js
+const { Blobs } = require('@netlify/blobs');
+
 exports.handler = async (event) => {
     const headers = {
         'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': 'Content-Type',
-        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
         'Content-Type': 'application/json'
     };
 
-    if (event.httpMethod === 'OPTIONS') {
-        return { statusCode: 204, headers, body: '' };
-    }
-
     try {
-        const { Blobs } = require('@netlify/blobs');
         const userId = event.queryStringParameters?.id;
         
         if (!userId) {
@@ -23,22 +18,18 @@ exports.handler = async (event) => {
             };
         }
 
-        // Conectar ao store de usuários
+        // Usar store local
         const userStore = Blobs.store('users');
-        
-        // Buscar usuário
         let userData = await userStore.get(userId, { type: 'json' });
         
         if (!userData) {
-            // Se não existir, retorna estrutura vazia
             userData = {
                 user_id: userId,
                 username: '',
                 balance: 0,
                 last_daily: null,
                 total_earned: 0,
-                daily_streak: 0,
-                created_at: new Date().toISOString()
+                daily_streak: 0
             };
         }
 
@@ -48,11 +39,10 @@ exports.handler = async (event) => {
             body: JSON.stringify(userData)
         };
     } catch (error) {
-        console.error('Erro:', error);
         return {
             statusCode: 500,
             headers,
-            body: JSON.stringify({ error: 'Erro interno do servidor' })
+            body: JSON.stringify({ error: error.message })
         };
     }
 };
