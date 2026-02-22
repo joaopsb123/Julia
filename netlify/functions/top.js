@@ -1,7 +1,3 @@
-const fetch = require('node-fetch');
-
-const FIREBASE_URL = 'https://bot-discord-4d74d-default-rtdb.firebaseio.com';
-
 exports.handler = async (event) => {
     const headers = {
         'Access-Control-Allow-Origin': '*',
@@ -11,37 +7,49 @@ exports.handler = async (event) => {
     };
 
     if (event.httpMethod === 'OPTIONS') {
-        return { statusCode: 200, headers, body: '' };
+        return { statusCode: 204, headers, body: '' };
     }
 
     try {
-        // Buscar todos os usuários
-        const response = await fetch(`${FIREBASE_URL}/users.json`);
-        const users = await response.json();
-
-        if (!users) {
+        const { Blobs } = require('@netlify/blobs');
+        const userStore = Blobs.store('users');
+        
+        // Listar todas as chaves (IDs dos usuários)
+        const { blobs } = await userStore.list();
+        
+        if (!blobs || blobs.length === 0) {
             return { statusCode: 200, headers, body: JSON.stringify([]) };
         }
 
-        // Converter para array e ordenar
-        const userList = Object.entries(users)
-            .map(([id, data]) => ({
-                username: data.username || 'Anônimo',
-                balance: data.balance || 0
-            }))
-            .filter(user => user.username !== 'Anônimo' || user.balance > 0)
-            .sort((a, b) => b.balance - a.balance)
-            .slice(0, 10);
+        // Buscar dados de cada usuário
+        const usersList = [];
+        
+        for (const blob of blobs) {
+            const userData = await userStore.get(blob.key, { type: 'json' });
+            if (userData && userData.username && userData.username !== 'Usuário') {
+                usersList.push({
+                    username: userData.username,
+                    balance: userData.balance || 0
+                });
+            }
+        }
+
+        // Ordenar por saldo (maior para menor)
+        usersList.sort((a, b) => b.balance - a.balance);
+        
+        // Limitar a 10
+        const top10 = usersList.slice(0, 10);
 
         return {
             statusCode: 200,
             headers,
-            body: JSON.stringify(userList)
+            body: JSON.stringify(top10)
         };
 
     } catch (error) {
+        console.error('Erro top:', error);
         return {
-            statusCode: 500,
+            statusCode: 200,
             headers,
             body: JSON.stringify([])
         };
