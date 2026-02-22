@@ -1,7 +1,4 @@
-const fetch = require('node-fetch');
-
-const FIREBASE_URL = 'https://bot-discord-4d74d-default-rtdb.firebaseio.com';
-
+// Função para buscar usuário no Netlify Blobs
 exports.handler = async (event) => {
     const headers = {
         'Access-Control-Allow-Origin': '*',
@@ -11,10 +8,11 @@ exports.handler = async (event) => {
     };
 
     if (event.httpMethod === 'OPTIONS') {
-        return { statusCode: 200, headers, body: '' };
+        return { statusCode: 204, headers, body: '' };
     }
 
     try {
+        const { Blobs } = require('@netlify/blobs');
         const userId = event.queryStringParameters?.id;
         
         if (!userId) {
@@ -25,26 +23,36 @@ exports.handler = async (event) => {
             };
         }
 
-        // Buscar usuário no Firebase
-        const response = await fetch(`${FIREBASE_URL}/users/${userId}.json`);
-        const data = await response.json();
+        // Conectar ao store de usuários
+        const userStore = Blobs.store('users');
+        
+        // Buscar usuário
+        let userData = await userStore.get(userId, { type: 'json' });
+        
+        if (!userData) {
+            // Se não existir, retorna estrutura vazia
+            userData = {
+                user_id: userId,
+                username: '',
+                balance: 0,
+                last_daily: null,
+                total_earned: 0,
+                daily_streak: 0,
+                created_at: new Date().toISOString()
+            };
+        }
 
         return {
             statusCode: 200,
             headers,
-            body: JSON.stringify(data || {
-                user_id: userId,
-                username: '',
-                balance: 0,
-                daily_streak: 0,
-                total_earned: 0
-            })
+            body: JSON.stringify(userData)
         };
     } catch (error) {
+        console.error('Erro:', error);
         return {
             statusCode: 500,
             headers,
-            body: JSON.stringify({ error: error.message })
+            body: JSON.stringify({ error: 'Erro interno do servidor' })
         };
     }
 };
