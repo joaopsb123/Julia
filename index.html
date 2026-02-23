@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Julia Rewards - Sistema de Resgate</title>
+    <title>Julia Rewards - Resgate Diário</title>
     <style>
         * {
             margin: 0;
@@ -18,8 +18,6 @@
             --success: #10B981;
             --danger: #EF4444;
             --warning: #F59E0B;
-            --dark: #1F2937;
-            --light: #F9FAFB;
         }
         
         body {
@@ -29,409 +27,178 @@
             justify-content: center;
             align-items: center;
             padding: 16px;
-            position: relative;
-            overflow-x: hidden;
         }
         
         .container {
-            max-width: 800px;
+            max-width: 600px;
             width: 100%;
-            position: relative;
-            z-index: 1;
         }
         
-        /* Header */
-        .header {
-            text-align: center;
-            margin-bottom: 24px;
-        }
-        
-        .logo {
-            font-size: 64px;
-            line-height: 1;
-            margin-bottom: 8px;
-            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));
-            animation: float 3s ease-in-out infinite;
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
+        .card {
+            background: white;
+            border-radius: 30px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
         }
         
         h1 {
-            font-size: clamp(32px, 8vw, 48px);
-            font-weight: 800;
-            color: white;
-            text-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            margin-bottom: 4px;
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2.5em;
         }
         
-        .badge {
-            display: inline-block;
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
-            padding: 6px 16px;
-            border-radius: 100px;
-            color: white;
-            font-size: 14px;
-            border: 1px solid rgba(255,255,255,0.1);
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
         }
         
-        /* Card principal */
-        .card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 32px;
-            padding: clamp(20px, 5vw, 32px);
-            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
-            border: 1px solid rgba(255,255,255,0.2);
-        }
-        
-        /* Área do usuário */
-        .user-area {
+        .user-section {
             display: flex;
-            gap: 12px;
-            margin-bottom: 24px;
+            gap: 10px;
+            margin-bottom: 30px;
             flex-wrap: wrap;
         }
         
-        .input-group {
+        .user-section input {
             flex: 1;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
             min-width: 200px;
         }
         
-        .input-group input {
-            width: 100%;
-            padding: 16px 20px;
-            background: white;
-            border: 2px solid #E5E7EB;
-            border-radius: 16px;
-            font-size: 16px;
-            transition: all 0.3s;
-        }
-        
-        .input-group input:focus {
+        .user-section input:focus {
             outline: none;
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(139,92,246,0.1);
         }
         
-        .btn {
-            padding: 16px 32px;
+        .user-section button {
+            padding: 15px 30px;
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
             border: none;
-            border-radius: 16px;
-            font-weight: 600;
+            border-radius: 10px;
             font-size: 16px;
+            font-weight: bold;
             cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 10px 20px -5px rgba(139,92,246,0.5);
+            transition: 0.3s;
         }
         
-        .btn:hover {
+        .user-section button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 20px 30px -5px rgba(139,92,246,0.7);
+            box-shadow: 0 10px 20px rgba(139,92,246,0.3);
         }
         
-        .btn:active {
-            transform: translateY(0);
-        }
-        
-        .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-        
-        /* Stats */
-        .stats-grid {
+        .stats {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 16px;
-            margin-bottom: 24px;
+            gap: 15px;
+            margin: 20px 0;
         }
         
-        .stat-card {
-            background: #F9FAFB;
-            border-radius: 20px;
-            padding: 20px 12px;
+        .stat {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
             text-align: center;
-            border: 1px solid #E5E7EB;
-            overflow: hidden;
-        }
-        
-        .stat-icon {
-            font-size: 28px;
-            margin-bottom: 8px;
         }
         
         .stat-label {
-            color: #6B7280;
-            font-size: 14px;
-            font-weight: 500;
-            margin-bottom: 4px;
-            white-space: nowrap;
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
         }
         
         .stat-value {
-            font-size: clamp(24px, 4vw, 32px);
-            font-weight: 700;
+            font-size: 1.8rem;
+            font-weight: bold;
             color: var(--primary);
-            line-height: 1.2;
-            overflow: hidden;
-            text-overflow: ellipsis;
         }
         
-        /* Timer */
-        .timer-card {
-            background: linear-gradient(135deg, rgba(139,92,246,0.05), rgba(236,72,153,0.05));
+        .timer {
+            background: #f8f9fa;
             border: 2px dashed var(--primary);
-            border-radius: 20px;
+            border-radius: 10px;
             padding: 20px;
             text-align: center;
-            margin-bottom: 20px;
-        }
-        
-        .timer-label {
-            color: #6B7280;
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 8px;
+            margin: 20px 0;
         }
         
         .timer-display {
-            font-size: clamp(36px, 8vw, 56px);
-            font-weight: 700;
+            font-size: 2.5rem;
+            font-weight: bold;
             color: var(--primary);
-            font-family: 'Courier New', monospace;
+            font-family: monospace;
         }
         
-        /* Botão de resgate */
         .claim-btn {
             width: 100%;
-            padding: 24px;
-            font-size: 1.4rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, var(--success), #059669);
-            border-radius: 30px;
-            margin-bottom: 24px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            box-shadow: 0 20px 40px -10px rgba(16,185,129,0.5);
-        }
-        
-        /* Área de pergunta */
-        .question-card {
-            background: linear-gradient(135deg, #FEF3C7, #FDE68A);
-            border-radius: 24px;
-            padding: 24px;
-            margin-bottom: 24px;
-            border: 2px solid var(--warning);
-            animation: slideIn 0.3s ease;
-        }
-        
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .question-title {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: #92400E;
-            font-weight: 600;
-            margin-bottom: 12px;
-        }
-        
-        .question-text {
+            padding: 20px;
             font-size: 1.2rem;
-            font-weight: 500;
-            color: #1F2937;
-            margin-bottom: 16px;
-        }
-        
-        .question-input {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-        
-        .question-input input {
-            flex: 1;
-            padding: 14px 18px;
-            border: 2px solid #D1D5DB;
-            border-radius: 16px;
-            font-size: 16px;
-            min-width: 200px;
-        }
-        
-        .question-input input:focus {
-            outline: none;
-            border-color: var(--warning);
-        }
-        
-        .question-btn {
-            padding: 14px 28px;
-            background: linear-gradient(135deg, var(--warning), #D97706);
+            background: linear-gradient(135deg, var(--success), #059669);
             color: white;
             border: none;
-            border-radius: 16px;
-            font-weight: 600;
+            border-radius: 10px;
+            font-weight: bold;
             cursor: pointer;
+            margin: 20px 0;
         }
         
-        /* Ranking */
-        .ranking-card {
-            background: #F9FAFB;
-            border-radius: 24px;
-            padding: 24px;
-            margin-top: 24px;
+        .claim-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(16,185,129,0.3);
         }
         
-        .ranking-title {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 20px;
-            font-size: 1.3rem;
-            color: #1F2937;
+        .claim-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
         }
         
-        .ranking-list {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+        .ranking {
+            margin-top: 20px;
+        }
+        
+        .ranking h3 {
+            margin-bottom: 15px;
         }
         
         .ranking-item {
             display: flex;
-            align-items: center;
-            padding: 12px 16px;
-            background: white;
-            border-radius: 16px;
-            border: 1px solid #E5E7EB;
-            transition: all 0.2s;
+            justify-content: space-between;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 5px;
         }
         
-        .ranking-item:hover {
-            transform: translateX(4px);
-            border-color: var(--primary);
-        }
-        
-        .rank-position {
-            width: 36px;
-            height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #F3F4F6;
-            border-radius: 50%;
-            font-weight: 700;
-            margin-right: 12px;
-        }
-        
-        .rank-1 {
-            background: linear-gradient(135deg, #FBBF24, #F59E0B);
-            color: white;
-        }
-        
-        .rank-2 {
-            background: linear-gradient(135deg, #9CA3AF, #6B7280);
-            color: white;
-        }
-        
-        .rank-3 {
-            background: linear-gradient(135deg, #B45309, #92400E);
-            color: white;
-        }
-        
-        .rank-info {
-            flex: 1;
-            font-weight: 500;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        
-        .rank-balance {
-            font-weight: 700;
-            color: var(--primary);
-            white-space: nowrap;
-        }
-        
-        /* Mensagens */
         .message {
             position: fixed;
-            bottom: 24px;
+            bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
-            padding: 16px 24px;
-            border-radius: 100px;
+            padding: 12px 24px;
+            border-radius: 50px;
             color: white;
-            font-weight: 500;
             display: none;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
             z-index: 1000;
-            text-align: center;
-            max-width: 90%;
         }
         
-        .message.success {
+        .success {
             background: linear-gradient(135deg, var(--success), #059669);
         }
         
-        .message.error {
+        .error {
             background: linear-gradient(135deg, var(--danger), #DC2626);
         }
         
-        .message.info {
-            background: linear-gradient(135deg, #3B82F6, #1D4ED8);
-        }
-        
-        /* Footer */
         .footer {
             text-align: center;
-            margin-top: 24px;
+            margin-top: 20px;
             color: rgba(255,255,255,0.8);
-            font-size: 14px;
-        }
-        
-        /* Responsivo */
-        @media (max-width: 640px) {
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .user-area {
-                flex-direction: column;
-            }
-            
-            .btn {
-                width: 100%;
-            }
-            
-            .question-input {
-                flex-direction: column;
-            }
-            
-            .question-input input {
-                width: 100%;
-            }
-            
-            .question-input button {
-                width: 100%;
-            }
         }
     </style>
     <!-- Firebase SDK -->
@@ -440,96 +207,52 @@
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <div class="logo">🎁</div>
-            <h1>Julia Rewards</h1>
-            <div class="badge">💰 Resgate • 🎯 Perguntas • 🔥 Streak</div>
-        </div>
-        
         <div class="card">
-            <!-- Área do usuário -->
-            <div class="user-area">
-                <div class="input-group">
-                    <input type="text" id="userId" placeholder="Seu ID do Discord" value="1287695169587646508">
-                </div>
-                <div class="input-group">
-                    <input type="text" id="username" placeholder="Seu nome">
-                </div>
-                <button class="btn" onclick="loadUser()" id="loadBtn">
-                    <span>📂</span> Carregar
-                </button>
+            <h1>🎁 Julia Rewards</h1>
+            <div class="subtitle">Resgate suas moedas diárias!</div>
+            
+            <div class="user-section">
+                <input type="text" id="userId" placeholder="Seu ID do Discord" value="1287695169587646508">
+                <input type="text" id="username" placeholder="Seu nome">
+                <button onclick="loadUser()" id="loadBtn">Carregar</button>
             </div>
             
-            <!-- Stats -->
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-icon">💰</div>
-                    <div class="stat-label">Saldo</div>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-label">💰 Saldo</div>
                     <div class="stat-value" id="balance">0</div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-icon">🔥</div>
-                    <div class="stat-label">Streak</div>
+                <div class="stat">
+                    <div class="stat-label">🔥 Streak</div>
                     <div class="stat-value" id="streak">0</div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-icon">📊</div>
-                    <div class="stat-label">Total</div>
+                <div class="stat">
+                    <div class="stat-label">📊 Total</div>
                     <div class="stat-value" id="total">0</div>
                 </div>
             </div>
             
-            <!-- Timer -->
-            <div class="timer-card">
-                <div class="timer-label">⏳ PRÓXIMO RESGATE</div>
+            <div class="timer">
+                <div>⏳ Próximo resgate</div>
                 <div class="timer-display" id="timer">--:--:--</div>
             </div>
             
-            <!-- Botão de resgate -->
-            <button class="btn claim-btn" onclick="startClaim()" id="claimBtn">
+            <button class="claim-btn" onclick="claimDaily()" id="claimBtn">
                 🎁 RESGATAR DIÁRIO
             </button>
             
-            <!-- Área da pergunta (inicialmente oculta) -->
-            <div id="questionArea" class="question-card" style="display: none;">
-                <div class="question-title">
-                    <span>🎯</span>
-                    <span>PERGUNTA BÔNUS</span>
-                </div>
-                <div class="question-text" id="questionText">Carregando...</div>
-                <div class="question-input">
-                    <input type="text" id="answerInput" placeholder="Digite sua resposta" autocomplete="off">
-                    <button class="question-btn" onclick="checkAnswer()">Responder</button>
-                </div>
-                <div style="margin-top: 12px; font-size: 14px; color: #6B7280;">
-                    ⏱️ Você tem 30 segundos para responder!
-                </div>
+            <div class="ranking">
+                <h3>🏆 Top 10</h3>
+                <div id="rankingList"></div>
             </div>
             
-            <!-- Ranking -->
-            <div class="ranking-card">
-                <div class="ranking-title">
-                    <span>🏆</span>
-                    <span>TOP 10 USUÁRIOS</span>
-                </div>
-                <div class="ranking-list" id="rankingList">
-                    <div style="text-align: center; padding: 20px; color: #6B7280;">
-                        Carregando ranking...
-                    </div>
-                </div>
-            </div>
+            <div id="message" class="message"></div>
         </div>
-        
-        <div class="footer">
-            ✦ Resgate a cada 24h • Bônus de streak até 70% • Perguntas bônus ✦
-        </div>
+        <div class="footer">Resgate a cada 24h | Bônus de streak até 70%</div>
     </div>
     
-    <!-- Mensagem flutuante -->
-    <div id="message" class="message"></div>
-    
     <script>
-        // Configuração do Firebase
+        // Configuração do Firebase (VERIFICADA)
         const firebaseConfig = {
             apiKey: "AIzaSyDJ_FRnNVJYOPbKUQZpx43WgYmqA-u-CB0",
             authDomain: "bot-discord-4d74d.firebaseapp.com",
@@ -537,51 +260,31 @@
             projectId: "bot-discord-4d74d"
         };
         
-        // Inicializar Firebase
-        firebase.initializeApp(firebaseConfig);
+        // Inicializar Firebase com tratamento de erro
+        try {
+            firebase.initializeApp(firebaseConfig);
+            console.log("✅ Firebase inicializado");
+        } catch (e) {
+            console.error("❌ Erro Firebase:", e);
+        }
+        
         const db = firebase.database();
         
-        // ========== VARIÁVEIS GLOBAIS ==========
+        // Variáveis globais
         let currentUser = null;
         let timerInterval = null;
-        let questionTimer = null;
-        let currentQuestion = null;
-        const DAILY_BASE = 100;
+        const DAILY_AMOUNT = 100;
         
-        // Banco de perguntas
-        const PERGUNTAS = [
-            { pergunta: "Qual é a capital do Brasil?", resposta: "brasilia" },
-            { pergunta: "Quanto é 2 + 2?", resposta: "4" },
-            { pergunta: "Qual é a cor do céu?", resposta: "azul" },
-            { pergunta: "Em que ano o Brasil foi descoberto?", resposta: "1500" },
-            { pergunta: "Qual é o maior planeta do sistema solar?", resposta: "jupiter" },
-            { pergunta: "Quem escreveu 'Dom Casmurro'?", resposta: "machado de assis" },
-            { pergunta: "Qual é o símbolo químico da água?", resposta: "h2o" },
-            { pergunta: "Quantos dias tem um ano bissexto?", resposta: "366" },
-            { pergunta: "Qual é o time com mais títulos brasileiros?", resposta: "palmeiras" },
-            { pergunta: "Quanto é 7 x 8?", resposta: "56" },
-            { pergunta: "Qual é a moeda do Japão?", resposta: "iene" },
-            { pergunta: "Quem pintou a Mona Lisa?", resposta: "leonardo da vinci" },
-            { pergunta: "Qual é o livro mais vendido do mundo?", resposta: "biblia" },
-            { pergunta: "Quantos continentes existem?", resposta: "7" },
-            { pergunta: "Qual é o maior oceano do mundo?", resposta: "pacifico" }
-        ];
-        
-        // ========== FUNÇÕES ==========
-        
-        // Mostrar mensagem
+        // Função para mostrar mensagem
         function showMessage(text, type) {
             const msg = document.getElementById('message');
             msg.textContent = text;
             msg.className = `message ${type}`;
             msg.style.display = 'block';
-            
-            setTimeout(() => {
-                msg.style.display = 'none';
-            }, 4000);
+            setTimeout(() => msg.style.display = 'none', 3000);
         }
         
-        // Carregar usuário
+        // Função para carregar usuário
         async function loadUser() {
             const userId = document.getElementById('userId').value.trim();
             if (!userId) {
@@ -590,8 +293,18 @@
             }
             
             try {
+                console.log("Buscando usuário:", userId);
+                
+                // Testar conexão primeiro
+                const testRef = db.ref('.info/connected');
+                testRef.on('value', (snap) => {
+                    console.log("Conexão Firebase:", snap.val());
+                });
+                
                 const snapshot = await db.ref('users/' + userId).once('value');
-                let userData = snapshot.val();
+                const userData = snapshot.val();
+                
+                console.log("Dados recebidos:", userData);
                 
                 if (userData) {
                     currentUser = {
@@ -599,6 +312,7 @@
                         ...userData
                     };
                     document.getElementById('username').value = userData.name || '';
+                    showMessage('✅ Usuário carregado!', 'success');
                 } else {
                     // Criar usuário novo
                     const newUser = {
@@ -613,28 +327,177 @@
                         user_id: userId,
                         ...newUser
                     };
+                    showMessage('✅ Novo usuário criado!', 'success');
                 }
                 
                 updateUI();
-                showMessage('✅ Usuário carregado!', 'success');
                 localStorage.setItem('lastId', userId);
                 
             } catch (error) {
-                showMessage('Erro ao carregar usuário', 'error');
-                console.error(error);
+                console.error("Erro detalhado:", error);
+                showMessage('Erro ao conectar com Firebase: ' + error.message, 'error');
             }
         }
         
-        // Iniciar resgate (mostra pergunta)
-        function startClaim() {
+        // Função para resgatar daily
+        async function claimDaily() {
             if (!currentUser) {
                 showMessage('Carregue um usuário primeiro', 'error');
                 return;
             }
             
-            // Escolher pergunta aleatória
-            currentQuestion = PERGUNTAS[Math.floor(Math.random() * PERGUNTAS.length)];
+            const userId = currentUser.user_id;
+            const userName = document.getElementById('username').value || currentUser.name || 'Usuário';
             
-            // Mostrar área da pergunta
-            document.getElementById('questionArea').style.display = 'block';
-            document.
+            try {
+                const snapshot = await db.ref('users/' + userId).once('value');
+                let user = snapshot.val() || { bal: 0, streak: 0, last: null, total: 0 };
+                
+                const now = new Date();
+                
+                // Verificar se já resgatou hoje
+                if (user.last) {
+                    const last = new Date(user.last);
+                    const timeDiff = (now - last) / 1000;
+                    if (timeDiff < 86400) {
+                        const timeLeft = 86400 - timeDiff;
+                        startTimer(timeLeft);
+                        showMessage('⏰ Você já resgatou hoje!', 'error');
+                        return;
+                    }
+                }
+                
+                // Calcular streak
+                let streak = 1;
+                if (user.streak > 0 && user.last) {
+                    const last = new Date(user.last);
+                    const hoursDiff = (now - last) / (1000 * 60 * 60);
+                    if (hoursDiff < 48) {
+                        streak = (user.streak || 0) + 1;
+                    }
+                }
+                
+                // Calcular bônus
+                const bonus = 1 + (Math.min(streak, 7) * 0.1);
+                const amount = Math.floor(DAILY_AMOUNT * bonus);
+                
+                // Atualizar usuário
+                user.bal = (user.bal || 0) + amount;
+                user.last = now.toISOString();
+                user.streak = streak;
+                user.total = (user.total || 0) + amount;
+                user.name = userName;
+                
+                await db.ref('users/' + userId).set(user);
+                
+                currentUser = user;
+                currentUser.user_id = userId;
+                
+                updateUI();
+                showMessage(`🎉 Ganhou ${amount} moedas! Streak: ${streak}`, 'success');
+                
+            } catch (error) {
+                console.error("Erro no resgate:", error);
+                showMessage('Erro ao resgatar', 'error');
+            }
+        }
+        
+        // Função para carregar ranking
+        async function loadRanking() {
+            try {
+                const snapshot = await db.ref('users').once('value');
+                const users = snapshot.val() || {};
+                
+                const list = [];
+                for (const id in users) {
+                    const user = users[id];
+                    if (user && user.name) {
+                        list.push({
+                            name: user.name,
+                            bal: user.bal || 0
+                        });
+                    }
+                }
+                
+                list.sort((a, b) => b.bal - a.bal);
+                
+                const rankingList = document.getElementById('rankingList');
+                
+                if (list.length === 0) {
+                    rankingList.innerHTML = '<div class="ranking-item">Nenhum usuário no ranking</div>';
+                    return;
+                }
+                
+                let html = '';
+                for (let i = 0; i < Math.min(10, list.length); i++) {
+                    const user = list[i];
+                    const medal = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `${i+1}.`;
+                    html += `<div class="ranking-item"><span>${medal} ${user.name}</span><span>💰 ${user.bal}</span></div>`;
+                }
+                
+                rankingList.innerHTML = html;
+                
+            } catch (error) {
+                console.error("Erro ranking:", error);
+                document.getElementById('rankingList').innerHTML = '<div class="ranking-item">Erro ao carregar ranking</div>';
+            }
+        }
+        
+        // Função para atualizar interface
+        function updateUI() {
+            if (currentUser) {
+                document.getElementById('balance').textContent = currentUser.bal || 0;
+                document.getElementById('streak').textContent = currentUser.streak || 0;
+                document.getElementById('total').textContent = currentUser.total || 0;
+                
+                if (currentUser.last) {
+                    const last = new Date(currentUser.last);
+                    const next = last.getTime() + (24 * 60 * 60 * 1000);
+                    const timeLeft = Math.max(0, (next - Date.now()) / 1000);
+                    startTimer(timeLeft);
+                } else {
+                    startTimer(0);
+                }
+            }
+        }
+        
+        // Função para iniciar timer
+        function startTimer(seconds) {
+            if (timerInterval) clearInterval(timerInterval);
+            
+            if (seconds <= 0) {
+                document.getElementById('timer').textContent = '✅ Disponível!';
+                return;
+            }
+            
+            timerInterval = setInterval(() => {
+                if (seconds <= 0) {
+                    clearInterval(timerInterval);
+                    document.getElementById('timer').textContent = '✅ Disponível!';
+                    return;
+                }
+                
+                const hours = Math.floor(seconds / 3600);
+                const minutes = Math.floor((seconds % 3600) / 60);
+                const secs = Math.floor(seconds % 60);
+                
+                document.getElementById('timer').textContent = 
+                    `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+                
+                seconds--;
+            }, 1000);
+        }
+        
+        // Carregar último ID salvo
+        const savedId = localStorage.getItem('lastId');
+        if (savedId) {
+            document.getElementById('userId').value = savedId;
+            setTimeout(loadUser, 500);
+        }
+        
+        // Carregar ranking
+        loadRanking();
+        setInterval(loadRanking, 30000);
+    </script>
+</body>
+</html>
