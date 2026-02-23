@@ -2,376 +2,541 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Julia Rewards • Sistema Completo</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎁</text></svg>">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Julia Rewards</title>
     <style>
-        *{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}
-        body{background:linear-gradient(145deg,#0f172a 0%,#1e1b4b 100%);min-height:100vh;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
-        .gradient-bg{position:fixed;top:0;left:0;right:0;bottom:0;background:radial-gradient(circle at 30% 50%,rgba(139,92,246,0.2),transparent 50%),radial-gradient(circle at 70% 80%,rgba(236,72,153,0.2),transparent 50%);z-index:-1}
-        .container{max-width:1200px;margin:0 auto;padding:16px}
-        .header{text-align:center;margin-bottom:24px}
-        .logo{font-size:48px;line-height:1;margin-bottom:8px;filter:drop-shadow(0 10px 20px rgba(0,0,0,0.3));animation:float 3s ease-in-out infinite}
-        @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
-        h1{font-size:clamp(28px,8vw,48px);font-weight:800;background:linear-gradient(135deg,#fff,#cbd5e1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:4px}
-        .badge{display:inline-block;background:rgba(255,255,255,0.1);backdrop-filter:blur(10px);padding:6px 16px;border-radius:100px;color:#fff;font-size:14px;border:1px solid rgba(255,255,255,0.1)}
-        .user-card{background:rgba(255,255,255,0.05);backdrop-filter:blur(10px);border-radius:32px;padding:24px;margin-bottom:24px;border:1px solid rgba(255,255,255,0.1);box-shadow:0 25px 50px -12px rgba(0,0,0,0.5)}
-        .user-inputs{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:24px}
-        .input-group{flex:1;min-width:200px}
-        .input-group input{width:100%;padding:16px 20px;background:rgba(0,0,0,0.3);border:2px solid rgba(255,255,255,0.1);border-radius:20px;font-size:16px;color:#fff;transition:all 0.3s}
-        .input-group input:focus{outline:none;border-color:#8b5cf6;background:rgba(0,0,0,0.5)}
-        .input-group input::placeholder{color:rgba(255,255,255,0.4)}
-        .btn{background:linear-gradient(135deg,#8b5cf6,#ec4899);color:white;border:none;padding:16px 32px;border-radius:20px;font-weight:600;font-size:16px;cursor:pointer;transition:all 0.3s;box-shadow:0 10px 20px -5px rgba(139,92,246,0.5)}
-        .btn:hover{transform:translateY(-2px);box-shadow:0 20px 30px -5px rgba(139,92,246,0.7)}
-        .btn:active{transform:translateY(0)}
-        .stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px}
-        .stat-item{background:rgba(0,0,0,0.3);border-radius:24px;padding:20px;text-align:center;border:1px solid rgba(255,255,255,0.05);backdrop-filter:blur(5px)}
-        .stat-icon{font-size:32px;margin-bottom:8px}
-        .stat-label{color:rgba(255,255,255,0.5);font-size:14px;font-weight:500;text-transform:uppercase;letter-spacing:0.5px}
-        .stat-value{color:#fff;font-size:28px;font-weight:700;margin-top:4px}
-        .timer-card{background:linear-gradient(135deg,rgba(139,92,246,0.2),rgba(236,72,153,0.2));border-radius:24px;padding:24px;text-align:center;margin-bottom:24px;border:1px solid rgba(255,255,255,0.1);backdrop-filter:blur(10px)}
-        .timer-label{color:rgba(255,255,255,0.7);font-size:14px;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
-        .timer-display{font-size:clamp(32px,10vw,56px);font-weight:700;color:#fff;font-family:'Courier New',monospace;text-shadow:0 0 20px rgba(139,92,246,0.5)}
-        .claim-btn{width:100%;padding:24px;font-size:20px;font-weight:700;background:linear-gradient(135deg,#10b981,#059669);border-radius:30px;margin-bottom:24px;text-transform:uppercase;letter-spacing:1px}
-        .features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-bottom:24px}
-        .feature-card{background:rgba(255,255,255,0.03);border-radius:24px;padding:20px;border:1px solid rgba(255,255,255,0.05);backdrop-filter:blur(10px);transition:all 0.3s}
-        .feature-card:hover{transform:translateY(-4px);background:rgba(255,255,255,0.05);border-color:rgba(139,92,246,0.3)}
-        .feature-header{display:flex;align-items:center;gap:12px;margin-bottom:16px}
-        .feature-icon{font-size:32px}
-        .feature-title{font-size:20px;font-weight:700;color:#fff}
-        .feature-list{list-style:none}
-        .feature-list li{margin-bottom:12px;color:rgba(255,255,255,0.7);font-size:15px;display:flex;align-items:center;gap:8px}
-        .feature-list code{background:rgba(0,0,0,0.3);padding:4px 8px;border-radius:8px;color:#8b5cf6;font-size:13px}
-        .ranking-card{background:rgba(0,0,0,0.3);border-radius:24px;padding:24px;margin-bottom:24px;border:1px solid rgba(255,255,255,0.05)}
-        .ranking-title{display:flex;align-items:center;gap:8px;margin-bottom:20px;color:#fff;font-size:20px}
-        .ranking-list{display:flex;flex-direction:column;gap:8px}
-        .ranking-item{display:flex;align-items:center;gap:12px;padding:12px;background:rgba(255,255,255,0.03);border-radius:16px}
-        .rank{width:36px;height:36px;display:flex;align-items:center;justify-content:center;background:rgba(139,92,246,0.2);border-radius:50%;font-weight:700;color:#8b5cf6}
-        .rank-1{background:#fbbf24;color:#000}
-        .rank-2{background:#94a3b8;color:#000}
-        .rank-3{background:#b45309;color:#fff}
-        .user-info{flex:1;color:#fff}
-        .user-balance{font-weight:700;color:#8b5cf6}
-        .admin-panel{background:rgba(0,0,0,0.5);border-radius:24px;padding:24px;margin-top:24px;border:2px solid #8b5cf6}
-        .admin-title{display:flex;align-items:center;gap:8px;color:#fff;font-size:20px;margin-bottom:20px}
-        .config-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:16px}
-        .config-item label{display:block;color:rgba(255,255,255,0.7);font-size:14px;margin-bottom:8px}
-        .config-item input{width:100%;padding:12px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.1);border-radius:12px;color:#fff}
-        .message{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);padding:16px 24px;border-radius:100px;color:#fff;font-weight:500;z-index:1000;display:none;box-shadow:0 10px 30px rgba(0,0,0,0.3)}
-        .message.success{background:#10b981}
-        .message.error{background:#ef4444}
-        .footer{text-align:center;color:rgba(255,255,255,0.4);font-size:14px;margin-top:32px;padding:20px}
-        @media(max-width:480px){
-            .stats-grid{grid-template-columns:1fr}
-            .user-inputs{flex-direction:column}
-            .btn{width:100%}
-            .feature-card{padding:16px}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            min-height: 100vh;
+            padding: 20px;
+            color: white;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            text-align: center;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #a0aec0;
+            margin-bottom: 30px;
+        }
+        
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .input-group input {
+            flex: 1;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            color: white;
+            font-size: 16px;
+        }
+        
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        button {
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            border-radius: 15px;
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .stat {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .stat-label {
+            color: #a0aec0;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+        
+        .stat-value {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .timer {
+            background: rgba(102, 126, 234, 0.1);
+            border: 2px dashed #667eea;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .timer-display {
+            font-size: 2.5em;
+            font-weight: bold;
+            font-family: monospace;
+            color: #667eea;
+        }
+        
+        .claim-btn {
+            width: 100%;
+            padding: 20px;
+            font-size: 1.2em;
+            margin: 20px 0;
+            background: linear-gradient(135deg, #48bb78, #38a169);
+        }
+        
+        .features {
+            display: grid;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .feature {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 15px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .feature h3 {
+            margin-bottom: 10px;
+            color: #667eea;
+        }
+        
+        .feature p {
+            color: #a0aec0;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+        
+        .feature code {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 4px 8px;
+            border-radius: 8px;
+            color: #48bb78;
+        }
+        
+        .ranking {
+            margin-top: 20px;
+        }
+        
+        .ranking-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+            margin-bottom: 8px;
+        }
+        
+        .ranking-position {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #667eea;
+            border-radius: 50%;
+            font-weight: bold;
+        }
+        
+        .ranking-name {
+            flex: 1;
+            margin-left: 10px;
+        }
+        
+        .ranking-balance {
+            font-weight: bold;
+            color: #48bb78;
+        }
+        
+        .message {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 12px 24px;
+            border-radius: 50px;
+            background: white;
+            color: #333;
+            display: none;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+        }
+        
+        .message.success { background: #48bb78; color: white; }
+        .message.error { background: #f56565; color: white; }
+        
+        @media (max-width: 480px) {
+            .stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .input-group {
+                flex-direction: column;
+            }
+            
+            button {
+                width: 100%;
+            }
         }
     </style>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 </head>
 <body>
-    <div class="gradient-bg"></div>
     <div class="container">
-        <div class="header">
-            <div class="logo">🎁</div>
-            <h1>Julia Rewards</h1>
-            <div class="badge">💰 Casamento • 🎰 Apostas • 🏦 Banco</div>
-        </div>
-
-        <div class="user-card">
-            <div class="user-inputs">
-                <div class="input-group">
-                    <input type="text" id="userId" placeholder="Seu ID do Discord" value="1287695169587646508">
-                </div>
-                <div class="input-group">
-                    <input type="text" id="username" placeholder="Seu nome">
-                </div>
-                <button class="btn" onclick="loadUser()">Carregar</button>
+        <div class="card">
+            <h1>🎁 Julia Rewards</h1>
+            <div class="subtitle">Sistema de Resgate • Casamento • Apostas • Banco</div>
+            
+            <!-- Login Section -->
+            <div class="input-group">
+                <input type="text" id="userId" placeholder="Seu ID do Discord" value="1287695169587646508">
+                <input type="text" id="username" placeholder="Seu nome">
+                <button onclick="loadUser()">Carregar</button>
             </div>
-
-            <div class="stats-grid">
-                <div class="stat-item">
-                    <div class="stat-icon">💰</div>
-                    <div class="stat-label">Saldo</div>
+            
+            <!-- Stats -->
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-label">💰 Saldo</div>
                     <div class="stat-value" id="balance">0</div>
                 </div>
-                <div class="stat-item">
-                    <div class="stat-icon">🔥</div>
-                    <div class="stat-label">Streak</div>
+                <div class="stat">
+                    <div class="stat-label">🔥 Streak</div>
                     <div class="stat-value" id="streak">0</div>
                 </div>
-                <div class="stat-item">
-                    <div class="stat-icon">💍</div>
-                    <div class="stat-label">Casamento</div>
+                <div class="stat">
+                    <div class="stat-label">💍 Casado</div>
                     <div class="stat-value" id="married">Não</div>
                 </div>
             </div>
-
-            <div class="timer-card">
-                <div class="timer-label">⏳ PRÓXIMO RESGATE</div>
+            
+            <!-- Timer -->
+            <div class="timer">
+                <div>⏳ Próximo Resgate</div>
                 <div class="timer-display" id="timer">--:--:--</div>
             </div>
-
-            <button class="btn claim-btn" onclick="claimDaily()">🎁 RESGATAR DIÁRIO</button>
-        </div>
-
-        <div class="features-grid">
-            <div class="feature-card">
-                <div class="feature-header">
-                    <span class="feature-icon">💍</span>
-                    <span class="feature-title">Casamento</span>
+            
+            <!-- Claim Button -->
+            <button class="claim-btn" onclick="claimDaily()">🎁 RESGATAR DIÁRIO</button>
+            
+            <!-- Features -->
+            <div class="features">
+                <div class="feature">
+                    <h3>💍 Casamento</h3>
+                    <p><code>!casar pedir @user</code> - Pedir</p>
+                    <p><code>!casar aceitar @user</code> - Aceitar</p>
+                    <p><code>!casar divorciar</code> - Divórcio (500💰)</p>
+                    <p><code>!casar presentear</code> - Presente</p>
+                    <p><code>!casar info</code> - Info</p>
                 </div>
-                <ul class="feature-list">
-                    <li><code>!casar pedir @user</code> Pedir</li>
-                    <li><code>!casar aceitar @user</code> Aceitar</li>
-                    <li><code>!casar divorciar</code> Divórcio (500💰)</li>
-                    <li><code>!casar presentear</code> Presente diário</li>
-                    <li><code>!casar info</code> Ver casal</li>
-                </ul>
-            </div>
-
-            <div class="feature-card">
-                <div class="feature-header">
-                    <span class="feature-icon">🎰</span>
-                    <span class="feature-title">Apostas</span>
+                
+                <div class="feature">
+                    <h3>🎰 Apostas</h3>
+                    <p><code>!apostar dados 100</code> - Dados</p>
+                    <p><code>!apostar roleta vermelho 50</code> - Roleta</p>
+                    <p><code>!apostar slot 50</code> - Slot</p>
                 </div>
-                <ul class="feature-list">
-                    <li><code>!apostar dados 100</code> 🎲 Dados (x2)</li>
-                    <li><code>!apostar roleta vermelho 50</code> 🎰 2x</li>
-                    <li><code>!apostar slot 50</code> 🎰 Caça-níquel</li>
-                </ul>
-            </div>
-
-            <div class="feature-card">
-                <div class="feature-header">
-                    <span class="feature-icon">🏦</span>
-                    <span class="feature-title">Banco</span>
-                </div>
-                <ul class="feature-list">
-                    <li><code>!banco depositar 1000</code> Depositar</li>
-                    <li><code>!banco sacar 500</code> Sacar</li>
-                    <li><code>!banco ver</code> Ver poupança</li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="ranking-card">
-            <div class="ranking-title">
-                <span>🏆</span>
-                <span>TOP 10 USUÁRIOS</span>
-            </div>
-            <div class="ranking-list" id="rankingList">
-                <div style="text-align:center;color:rgba(255,255,255,0.5);padding:20px">Carregando...</div>
-            </div>
-        </div>
-
-        <div id="adminPanel" class="admin-panel" style="display:none">
-            <div class="admin-title">
-                <span>⚙️</span>
-                <span>Painel Administrativo</span>
-            </div>
-            <div class="config-grid">
-                <div class="config-item">
-                    <label>💰 Daily Base</label>
-                    <input type="number" id="dailyAmount" value="100">
-                </div>
-                <div class="config-item">
-                    <label>🔥 Bônus por streak</label>
-                    <input type="number" id="streakBonus" value="10">%
-                </div>
-                <div class="config-item">
-                    <label>💔 Custo divórcio</label>
-                    <input type="number" id="divorceCost" value="500">
-                </div>
-                <div class="config-item">
-                    <label>📈 Juros diários</label>
-                    <input type="number" id="interestRate" value="5">%
+                
+                <div class="feature">
+                    <h3>🏦 Banco</h3>
+                    <p><code>!banco depositar 1000</code> - Depositar</p>
+                    <p><code>!banco sacar 500</code> - Sacar</p>
+                    <p><code>!banco ver</code> - Ver poupança</p>
                 </div>
             </div>
-            <button class="btn" onclick="saveConfig()" style="margin-top:20px;width:100%;background:#10b981">Salvar Configurações</button>
-        </div>
-
-        <div id="message" class="message"></div>
-
-        <div class="footer">
-            ✦ Resgate a cada 24h • Bônus de streak até 70% • Dados salvos em tempo real ✦
+            
+            <!-- Ranking -->
+            <div class="ranking">
+                <h3>🏆 Top 10</h3>
+                <div id="rankingList"></div>
+            </div>
         </div>
     </div>
-
+    
+    <div id="message" class="message"></div>
+    
     <script>
-        // Firebase config
-        firebase.initializeApp({
+        // Configuração SIMPLES do Firebase
+        const firebaseConfig = {
             apiKey: "AIzaSyDJ_FRnNVJYOPbKUQZpx43WgYmqA-u-CB0",
             authDomain: "bot-discord-4d74d.firebaseapp.com",
             databaseURL: "https://bot-discord-4d74d-default-rtdb.firebaseio.com",
             projectId: "bot-discord-4d74d"
-        });
-        const db = firebase.database();
+        };
         
-        // Constantes
-        const ADMIN_ID = "1287695169587646508";
+        // Inicializar Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        
+        // Variáveis globais
         let currentUser = null;
-        let timer = null;
-        const DAILY = 100;
-
-        // Funções principais
-        async function loadUser() {
-            const uid = document.getElementById('userId').value.trim();
-            if(!uid) return showMsg('Digite seu ID', 'error');
-            
-            try {
-                const snap = await db.ref('users/'+uid).once('value');
-                currentUser = snap.val() || {user_id:uid, username:'', balance:0, streak:0};
-                document.getElementById('username').value = currentUser.username || '';
-                updateUI();
-                showMsg('✅ Usuário carregado!', 'success');
-                localStorage.setItem('lastId', uid);
-                
-                // Admin panel
-                document.getElementById('adminPanel').style.display = uid === ADMIN_ID ? 'block' : 'none';
-                if(uid === ADMIN_ID) loadConfig();
-            } catch(e) {
-                showMsg('Erro ao carregar', 'error');
-            }
-        }
-
-        async function claimDaily() {
-            if(!currentUser) return showMsg('Carregue um usuário', 'error');
-            
-            const uid = currentUser.user_id;
-            const name = document.getElementById('username').value || currentUser.username || 'User';
-            
-            try {
-                const snap = await db.ref('users/'+uid).once('value');
-                let user = snap.val() || {balance:0, streak:0};
-                const now = new Date();
-                
-                if(user.last_daily) {
-                    const last = new Date(user.last_daily);
-                    if((now - last) / 1000 < 86400) {
-                        const timeLeft = 86400 - ((now - last) / 1000);
-                        startTimer(timeLeft);
-                        return showMsg('⏰ Já resgatou hoje!', 'error');
-                    }
-                }
-                
-                let streak = user.streak || 0;
-                if(user.last_daily) {
-                    const last = new Date(user.last_daily);
-                    streak = (now - last) / 3600000 < 48 ? streak + 1 : 1;
-                } else streak = 1;
-                
-                const bonus = 1 + (Math.min(streak, 7) * 0.1);
-                const amount = Math.floor(DAILY * bonus);
-                
-                user.balance = (user.balance || 0) + amount;
-                user.last_daily = now.toISOString();
-                user.streak = streak;
-                user.username = name;
-                
-                await db.ref('users/'+uid).set(user);
-                currentUser = user;
-                updateUI();
-                showMsg(`🎉 +${amount} moedas! Streak: ${streak}`, 'success');
-                confetti();
-                
-            } catch(e) {
-                showMsg('Erro ao resgatar', 'error');
-            }
-        }
-
-        async function loadRanking() {
-            try {
-                const snap = await db.ref('users').once('value');
-                const users = snap.val() || {};
-                const list = Object.values(users)
-                    .filter(u => u.username)
-                    .map(u => ({name: u.username, bal: u.balance || 0}))
-                    .sort((a,b) => b.bal - a.bal);
-                
-                const html = list.slice(0,10).map((u,i) => `
-                    <div class="ranking-item">
-                        <div class="rank ${i===0?'rank-1':i===1?'rank-2':i===2?'rank-3':''}">${i+1}</div>
-                        <div class="user-info">${u.name}</div>
-                        <div class="user-balance">${u.bal} 💰</div>
-                    </div>
-                `).join('');
-                
-                document.getElementById('rankingList').innerHTML = html || '<div class="ranking-item" style="justify-content:center">Ninguém ainda</div>';
-            } catch(e) {
-                console.log('Erro ranking:', e);
-            }
-        }
-
-        async function loadConfig() {
-            try {
-                const snap = await db.ref('config').once('value');
-                const cfg = snap.val() || {};
-                document.getElementById('dailyAmount').value = cfg.daily || 100;
-                document.getElementById('streakBonus').value = (cfg.streakBonus || 0.1) * 100;
-                document.getElementById('divorceCost').value = cfg.divorceCost || 500;
-                document.getElementById('interestRate').value = (cfg.interest || 0.05) * 100;
-            } catch(e) {}
-        }
-
-        async function saveConfig() {
-            const cfg = {
-                daily: parseInt(document.getElementById('dailyAmount').value) || 100,
-                streakBonus: (parseFloat(document.getElementById('streakBonus').value) || 10) / 100,
-                divorceCost: parseInt(document.getElementById('divorceCost').value) || 500,
-                interest: (parseFloat(document.getElementById('interestRate').value) || 5) / 100
-            };
-            await db.ref('config').set(cfg);
-            showMsg('✅ Configurações salvas!', 'success');
-        }
-
-        function updateUI() {
-            if(currentUser) {
-                document.getElementById('balance').textContent = currentUser.balance || 0;
-                document.getElementById('streak').textContent = currentUser.streak || 0;
-                document.getElementById('married').textContent = currentUser.casado ? 'Sim' : 'Não';
-                
-                if(currentUser.last_daily) {
-                    const next = new Date(currentUser.last_daily).getTime() + 86400000;
-                    const left = Math.max(0, (next - Date.now()) / 1000);
-                    startTimer(left);
-                } else {
-                    startTimer(0);
-                }
-            }
-        }
-
-        function startTimer(seconds) {
-            if(timer) clearInterval(timer);
-            if(seconds <= 0) {
-                document.getElementById('timer').textContent = '✅ Disponível!';
-                return;
-            }
-            
-            timer = setInterval(() => {
-                if(seconds <= 0) {
-                    clearInterval(timer);
-                    document.getElementById('timer').textContent = '✅ Disponível!';
-                    return;
-                }
-                const h = Math.floor(seconds/3600);
-                const m = Math.floor((seconds%3600)/60);
-                const s = Math.floor(seconds%60);
-                document.getElementById('timer').textContent = 
-                    `${h}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
-                seconds--;
-            }, 1000);
-        }
-
-        function showMsg(text, type) {
+        let timerInterval = null;
+        const DAILY_AMOUNT = 100;
+        
+        // Função para mostrar mensagem
+        function showMessage(text, type) {
             const msg = document.getElementById('message');
             msg.textContent = text;
             msg.className = `message ${type}`;
             msg.style.display = 'block';
             setTimeout(() => msg.style.display = 'none', 3000);
         }
-
+        
+        // Carregar usuário
+        async function loadUser() {
+            const userId = document.getElementById('userId').value.trim();
+            if (!userId) return showMessage('Digite seu ID', 'error');
+            
+            try {
+                const snapshot = await database.ref('users/' + userId).once('value');
+                const userData = snapshot.val();
+                
+                if (userData) {
+                    currentUser = { user_id: userId, ...userData };
+                    document.getElementById('username').value = userData.username || '';
+                } else {
+                    currentUser = {
+                        user_id: userId,
+                        username: '',
+                        balance: 0,
+                        streak: 0,
+                        last_daily: null,
+                        casado: null
+                    };
+                }
+                
+                updateUI();
+                showMessage('✅ Usuário carregado!', 'success');
+                localStorage.setItem('lastId', userId);
+                
+            } catch (error) {
+                showMessage('Erro ao carregar', 'error');
+                console.error(error);
+            }
+        }
+        
+        // Resgatar daily
+        async function claimDaily() {
+            if (!currentUser) return showMessage('Carregue um usuário', 'error');
+            
+            const userId = currentUser.user_id;
+            const username = document.getElementById('username').value || currentUser.username || 'Usuário';
+            
+            try {
+                const snapshot = await database.ref('users/' + userId).once('value');
+                let user = snapshot.val() || { balance: 0, streak: 0 };
+                const now = new Date();
+                
+                // Verificar se já resgatou hoje
+                if (user.last_daily) {
+                    const last = new Date(user.last_daily);
+                    const timeDiff = (now - last) / 1000;
+                    if (timeDiff < 86400) {
+                        startTimer(86400 - timeDiff);
+                        return showMessage('⏰ Já resgatou hoje!', 'error');
+                    }
+                }
+                
+                // Calcular streak
+                let streak = 1;
+                if (user.last_daily) {
+                    const last = new Date(user.last_daily);
+                    const hours = (now - last) / (1000 * 60 * 60);
+                    streak = hours < 48 ? (user.streak || 0) + 1 : 1;
+                }
+                
+                // Calcular bônus
+                const bonus = 1 + (Math.min(streak, 7) * 0.1);
+                const amount = Math.floor(DAILY_AMOUNT * bonus);
+                
+                // Atualizar usuário
+                user.balance = (user.balance || 0) + amount;
+                user.last_daily = now.toISOString();
+                user.streak = streak;
+                user.username = username;
+                
+                await database.ref('users/' + userId).set(user);
+                
+                currentUser = user;
+                updateUI();
+                showMessage(`🎉 Ganhou ${amount} moedas! Streak: ${streak}`, 'success');
+                confetti();
+                
+            } catch (error) {
+                showMessage('Erro ao resgatar', 'error');
+            }
+        }
+        
+        // Carregar ranking
+        async function loadRanking() {
+            try {
+                const snapshot = await database.ref('users').once('value');
+                const users = snapshot.val() || {};
+                
+                const list = Object.entries(users)
+                    .map(([id, user]) => ({
+                        username: user.username || 'Anônimo',
+                        balance: user.balance || 0
+                    }))
+                    .filter(u => u.username !== 'Anônimo')
+                    .sort((a, b) => b.balance - a.balance)
+                    .slice(0, 10);
+                
+                const html = list.map((user, i) => `
+                    <div class="ranking-item">
+                        <span class="ranking-position">${i + 1}</span>
+                        <span class="ranking-name">${user.username}</span>
+                        <span class="ranking-balance">${user.balance} 💰</span>
+                    </div>
+                `).join('');
+                
+                document.getElementById('rankingList').innerHTML = html || '<div style="text-align:center; padding:20px;">Ninguém no ranking ainda</div>';
+                
+            } catch (error) {
+                console.error('Erro ranking:', error);
+            }
+        }
+        
+        // Atualizar interface
+        function updateUI() {
+            if (currentUser) {
+                document.getElementById('balance').textContent = currentUser.balance || 0;
+                document.getElementById('streak').textContent = currentUser.streak || 0;
+                document.getElementById('married').textContent = currentUser.casado ? 'Sim' : 'Não';
+                
+                if (currentUser.last_daily) {
+                    const next = new Date(currentUser.last_daily).getTime() + 86400000;
+                    const timeLeft = Math.max(0, (next - Date.now()) / 1000);
+                    startTimer(timeLeft);
+                } else {
+                    startTimer(0);
+                }
+            }
+        }
+        
+        // Timer
+        function startTimer(seconds) {
+            if (timerInterval) clearInterval(timerInterval);
+            
+            if (seconds <= 0) {
+                document.getElementById('timer').textContent = '✅ Disponível!';
+                return;
+            }
+            
+            timerInterval = setInterval(() => {
+                if (seconds <= 0) {
+                    clearInterval(timerInterval);
+                    document.getElementById('timer').textContent = '✅ Disponível!';
+                    return;
+                }
+                
+                const h = Math.floor(seconds / 3600);
+                const m = Math.floor((seconds % 3600) / 60);
+                const s = Math.floor(seconds % 60);
+                
+                document.getElementById('timer').textContent = 
+                    `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+                
+                seconds--;
+            }, 1000);
+        }
+        
+        // Confetti
         function confetti() {
-            for(let i=0; i
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    const conf = document.createElement('div');
+                    conf.style.cssText = `
+                        position: fixed;
+                        left: ${Math.random() * 100}vw;
+                        top: -10px;
+                        width: 10px;
+                        height: 10px;
+                        background: hsl(${Math.random() * 360}, 100%, 50%);
+                        border-radius: 50%;
+                        pointer-events: none;
+                        z-index: 9999;
+                        animation: fall ${Math.random() * 3 + 2}s linear;
+                    `;
+                    document.body.appendChild(conf);
+                    setTimeout(() => conf.remove(), 5000);
+                }, i * 50);
+            }
+        }
+        
+        // CSS para confetti
+        const style = document.createElement('style');
+        style.textContent = '@keyframes fall { to { transform: translateY(100vh) rotate(360deg); } }';
+        document.head.appendChild(style);
+        
+        // Auto-carregar último ID
+        const lastId = localStorage.getItem('lastId');
+        if (lastId) {
+            document.getElementById('userId').value = lastId;
+            setTimeout(loadUser, 500);
+        }
+        
+        // Carregar ranking
+        loadRanking();
+        setInterval(loadRanking, 30000);
+    </script>
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+</body>
+    </html>
