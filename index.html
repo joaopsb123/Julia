@@ -3,603 +3,272 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🎁 Julia Rewards - Resgate Diário</title>
+    <title>Julia Rewards - Sistema Completo</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 800px;
-            width: 100%;
-        }
-
-        .card {
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-        }
-
-        h1 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 10px;
-            font-size: 2.5em;
-        }
-
-        .subtitle {
-            text-align: center;
-            color: #666;
-            margin-bottom: 30px;
-        }
-
-        .user-section {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-        }
-
-        .input-group {
-            flex: 1;
-            min-width: 200px;
-        }
-
-        .input-group input {
-            width: 100%;
-            padding: 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 16px;
-            transition: border-color 0.3s;
-        }
-
-        .input-group input:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-
-        button {
-            padding: 15px 30px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102,126,234,0.3);
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            margin: 30px 0;
-        }
-
-        .stat-card {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-        }
-
-        .stat-icon {
-            font-size: 2rem;
-            margin-bottom: 10px;
-        }
-
-        .stat-label {
-            color: #666;
-            font-size: 0.9rem;
-            margin-bottom: 5px;
-        }
-
-        .stat-value {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #667eea;
-        }
-
-        .timer-container {
-            background: #f8f9fa;
-            border-radius: 10px;
-            padding: 20px;
-            margin: 20px 0;
-            text-align: center;
-            border: 2px dashed #667eea;
-        }
-
-        .timer-label {
-            color: #666;
-            margin-bottom: 10px;
-        }
-
-        .timer-display {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: #667eea;
-            font-family: monospace;
-        }
-
-        .claim-button {
-            width: 100%;
-            padding: 20px;
-            font-size: 1.2rem;
-            margin: 20px 0;
-            background: linear-gradient(135deg, #48bb78, #38a169);
-        }
-
-        .ranking-section {
-            margin-top: 30px;
-        }
-
-        .ranking-title {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .ranking-list {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .ranking-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 10px;
-        }
-
-        .ranking-item .position {
-            font-weight: bold;
-            color: #667eea;
-        }
-
-        .ranking-item .username {
-            flex: 1;
-            margin-left: 15px;
-        }
-
-        .ranking-item .balance {
-            font-weight: bold;
-        }
-
-        .message {
-            text-align: center;
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 20px;
-            display: none;
-        }
-
-        .success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-
-        .error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-
-        .info {
-            background: #d1ecf1;
-            color: #0c5460;
-            border: 1px solid #bee5eb;
-        }
-
-        .footer {
-            text-align: center;
-            margin-top: 30px;
-            color: rgba(255,255,255,0.8);
-        }
-
-        @media (max-width: 600px) {
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-        }
+        *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
+        body{background:linear-gradient(135deg,#667eea,#764ba2);min-height:100vh;display:flex;justify-content:center;align-items:center;padding:20px}
+        .container{max-width:1200px;width:100%}
+        .card{background:rgba(255,255,255,0.95);backdrop-filter:blur(10px);border-radius:30px;padding:40px;box-shadow:0 20px 60px rgba(0,0,0,0.3)}
+        h1{text-align:center;color:#333;font-size:2.5em;margin-bottom:10px}
+        .subtitle{text-align:center;color:#666;margin-bottom:30px}
+        .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;margin:30px 0}
+        .section{background:#f8f9fa;border-radius:20px;padding:25px;border:2px solid transparent;transition:0.3s}
+        .section:hover{border-color:#667eea;transform:translateY(-5px);box-shadow:0 10px 30px rgba(0,0,0,0.1)}
+        .section h2{margin-bottom:15px;display:flex;align-items:center;gap:10px}
+        .user-area{display:flex;gap:10px;margin-bottom:30px;flex-wrap:wrap}
+        input{flex:1;padding:18px;border:2px solid #e0e0e0;border-radius:15px;font-size:16px;min-width:200px}
+        input:focus{outline:none;border-color:#667eea}
+        button{padding:18px 30px;background:linear-gradient(135deg,#667eea,#764ba2);color:white;border:none;border-radius:15px;cursor:pointer;font-weight:bold;transition:0.3s}
+        button:hover{transform:translateY(-2px);box-shadow:0 10px 20px rgba(102,126,234,0.3)}
+        .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin:20px 0}
+        .stat{background:white;padding:20px;border-radius:15px;text-align:center}
+        .stat-value{font-size:2.5rem;font-weight:bold;color:#667eea}
+        .timer{background:#e9ecef;border-radius:15px;padding:20px;text-align:center;margin:20px 0;border:2px dashed #667eea}
+        .timer-display{font-size:3rem;font-weight:bold;color:#667eea;font-family:monospace}
+        .claim-btn{width:100%;padding:25px;font-size:1.5rem;background:linear-gradient(135deg,#48bb78,#38a169);margin:20px 0}
+        .ranking{background:white;border-radius:15px;padding:20px}
+        .ranking-item{display:flex;justify-content:space-between;padding:12px;background:#f8f9fa;border-radius:10px;margin-bottom:8px}
+        .badge{background:#667eea;color:white;padding:4px 12px;border-radius:20px;font-size:0.8rem}
+        .message{padding:15px;border-radius:10px;margin-top:20px;display:none}
+        .success{background:#d4edda;color:#155724}
+        .error{background:#f8d7da;color:#721c24}
+        .footer{text-align:center;margin-top:30px;color:rgba(255,255,255,0.8)}
+        .admin-panel{background:#2d3748;color:white;border-radius:15px;padding:20px;margin-top:20px}
+        .config-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+        .config-item input{background:#4a5568;border:1px solid #718096;color:white}
     </style>
-    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 </head>
 <body>
-    <div class="container">
-        <div class="card">
-            <h1>🎁 Julia Rewards</h1>
-            <div class="subtitle">Resgate suas moedas diárias e suba no ranking!</div>
-            
-            <div class="user-section">
-                <div class="input-group">
-                    <input type="text" id="userId" placeholder="Seu ID do Discord" value="1287695169587646508">
-                </div>
-                <div class="input-group">
-                    <input type="text" id="username" placeholder="Seu nome (opcional)">
-                </div>
-                <button onclick="loadUser()" id="loadBtn">Carregar</button>
-            </div>
-
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-icon">💰</div>
-                    <div class="stat-label">SALDO</div>
-                    <div class="stat-value" id="balance">0</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">🔥</div>
-                    <div class="stat-label">STREAK</div>
-                    <div class="stat-value" id="streak">0</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">📊</div>
-                    <div class="stat-label">TOTAL</div>
-                    <div class="stat-value" id="totalEarned">0</div>
-                </div>
-            </div>
-
-            <div class="timer-container">
-                <div class="timer-label">⏳ PRÓXIMO RESGATE</div>
-                <div class="timer-display" id="timer">--:--:--</div>
-            </div>
-
-            <button class="claim-button" onclick="claimDaily()" id="claimBtn">
-                🎁 RESGATAR RECOMPENSA DIÁRIA
-            </button>
-
-            <div class="ranking-section">
-                <div class="ranking-title">
-                    <span>🏆</span>
-                    <h2>TOP 10 USUÁRIOS</h2>
-                </div>
-                <div class="ranking-list" id="rankingList">
-                    <div style="text-align: center; padding: 20px;">Carregando ranking...</div>
-                </div>
-            </div>
-
-            <div id="message" class="message"></div>
-        </div>
-
-        <div class="footer">
-            <p>Feito com ❤️ para a comunidade | Resgate disponível a cada 24h</p>
-            <p>🔥 Bônus de streak: até +70%</p>
-        </div>
-    </div>
-
-    <script>
-        // ========== CONFIGURAÇÃO DO FIREBASE ==========
-        const firebaseConfig = {
-            apiKey: "AIzaSyDJ_FRnNVJYOPbKUQZpx43WgYmqA-u-CB0",
-            authDomain: "bot-discord-4d74d.firebaseapp.com",
-            databaseURL: "https://bot-discord-4d74d-default-rtdb.firebaseio.com",
-            projectId: "bot-discord-4d74d",
-            storageBucket: "bot-discord-4d74d.firebasestorage.app",
-            messagingSenderId: "514594475218",
-            appId: "1:514594475218:web:e0bb790ab1cea3b4ef310b"
-        };
-
-        // Inicializar Firebase
-        firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
+<div class="container">
+    <div class="card">
+        <h1>🎁 Julia Rewards</h1>
+        <div class="subtitle">Sistema Completo - Resgate, Casamento, Apostas e Banco!</div>
         
-        console.log("✅ Firebase conectado!");
+        <div class="user-area">
+            <input type="text" id="userId" placeholder="Seu ID do Discord" value="1287695169587646508">
+            <input type="text" id="username" placeholder="Seu nome">
+            <button onclick="loadUser()">Carregar</button>
+        </div>
 
-        // ========== VARIÁVEIS GLOBAIS ==========
-        let currentUser = null;
-        let timerInterval = null;
-        const DAILY_AMOUNT = 100;
+        <div class="stats">
+            <div class="stat"><div>💰 Saldo</div><div class="stat-value" id="balance">0</div></div>
+            <div class="stat"><div>🔥 Streak</div><div class="stat-value" id="streak">0</div></div>
+            <div class="stat"><div>💍 Casado</div><div class="stat-value" id="married">Não</div></div>
+        </div>
 
-        // ========== FUNÇÕES ==========
+        <div class="timer">
+            <div>⏳ Próximo Resgate</div>
+            <div class="timer-display" id="timer">--:--:--</div>
+        </div>
 
-        async function loadUser() {
-            const userId = document.getElementById('userId').value.trim();
-            const loadBtn = document.getElementById('loadBtn');
+        <button class="claim-btn" onclick="claimDaily()">🎁 RESGATAR DIÁRIO</button>
+
+        <div class="grid">
+            <div class="section">
+                <h2>💍 Casamento</h2>
+                <p><strong>!casar pedir @user</strong> - Pedir</p>
+                <p><strong>!casar aceitar @user</strong> - Aceitar</p>
+                <p><strong>!casar divorciar</strong> - Divórcio (500)</p>
+                <p><strong>!casar presentear</strong> - Presente</p>
+                <p><strong>!casar info</strong> - Informações</p>
+            </div>
+            <div class="section">
+                <h2>🎰 Apostas</h2>
+                <p><strong>!apostar dados 100</strong> - Dados x2</p>
+                <p><strong>!apostar roleta vermelho 50</strong> - Roleta</p>
+                <p><strong>!apostar slot 50</strong> - Caça-níquel</p>
+            </div>
+            <div class="section">
+                <h2>🏦 Banco</h2>
+                <p><strong>!banco depositar 1000</strong> - Depositar</p>
+                <p><strong>!banco sacar 500</strong> - Sacar</p>
+                <p><strong>!banco ver</strong> - Ver poupança</p>
+            </div>
+        </div>
+
+        <div class="ranking">
+            <h3>🏆 Top 10</h3>
+            <div id="ranking"></div>
+        </div>
+
+        <!-- Painel Admin (visível só para você) -->
+        <div id="adminPanel" class="admin-panel" style="display:none">
+            <h3>⚙️ Painel Admin</h3>
+            <div class="config-grid">
+                <div class="config-item">
+                    <label>Daily Base</label>
+                    <input type="number" id="dailyAmount" value="100">
+                </div>
+                <div class="config-item">
+                    <label>Bônus por streak</label>
+                    <input type="number" id="streakBonus" value="10" step="0.1">%
+                </div>
+                <div class="config-item">
+                    <label>Divórcio custo</label>
+                    <input type="number" id="divorceCost" value="500">
+                </div>
+                <div class="config-item">
+                    <label>Juros diários</label>
+                    <input type="number" id="interestRate" value="5" step="0.1">%
+                </div>
+            </div>
+            <button onclick="saveConfig()" style="margin-top:15px;background:#48bb78">Salvar Configurações</button>
+        </div>
+
+        <div id="message" class="message"></div>
+    </div>
+    <div class="footer">❤️ Casamento · 🎰 Apostas · 🏦 Banco · Resgate a cada 24h</div>
+</div>
+
+<script>
+    // Firebase
+    firebase.initializeApp({
+        apiKey: "AIzaSyDJ_FRnNVJYOPbKUQZpx43WgYmqA-u-CB0",
+        authDomain: "bot-discord-4d74d.firebaseapp.com",
+        databaseURL: "https://bot-discord-4d74d-default-rtdb.firebaseio.com",
+        projectId: "bot-discord-4d74d"
+    });
+    const db = firebase.database();
+    
+    // Config
+    const ADMIN_ID = "1287695169587646508";
+    let currentUser = null;
+    let timer = null;
+    const DAILY = 100;
+
+    async function loadUser() {
+        const uid = document.getElementById('userId').value.trim();
+        if(!uid) return showMsg('Digite seu ID', 'error');
+        
+        const snap = await db.ref('users/'+uid).once('value');
+        currentUser = snap.val() || {user_id:uid,username:'',balance:0,streak:0};
+        document.getElementById('username').value = currentUser.username || '';
+        updateUI();
+        showMsg('✅ Carregado!', 'success');
+        
+        // Mostrar admin se for você
+        document.getElementById('adminPanel').style.display = uid===ADMIN_ID ? 'block' : 'none';
+    }
+
+    async function claimDaily() {
+        if(!currentUser) return showMsg('Carregue um usuário', 'error');
+        
+        const uid = currentUser.user_id;
+        const name = document.getElementById('username').value || currentUser.username || 'User';
+        const snap = await db.ref('users/'+uid).once('value');
+        let user = snap.val() || {balance:0,streak:0,last_daily:null};
+        const now = new Date();
+        
+        if(user.last_daily) {
+            const last = new Date(user.last_daily);
+            if((now-last)/1000 < 86400) {
+                return showMsg('⏰ Já resgatou hoje!', 'error');
+            }
+        }
+        
+        let streak = user.streak||0;
+        if(user.last_daily) {
+            const last = new Date(user.last_daily);
+            streak = (now-last)/3600000 < 48 ? streak+1 : 1;
+        } else streak = 1;
+        
+        const bonus = 1 + (Math.min(streak,7)*0.1);
+        const amount = Math.floor(DAILY * bonus);
+        
+        user.balance = (user.balance||0) + amount;
+        user.last_daily = now.toISOString();
+        user.streak = streak;
+        user.username = name;
+        
+        await db.ref('users/'+uid).set(user);
+        currentUser = user;
+        updateUI();
+        showMsg(`🎉 +${amount} moedas! Streak: ${streak}`, 'success');
+        confetti();
+    }
+
+    async function loadRanking() {
+        const snap = await db.ref('users').once('value');
+        const users = snap.val() || {};
+        const list = Object.values(users).filter(u=>u.username).map(u=>({name:u.username,bal:u.balance||0}));
+        list.sort((a,b)=>b.bal-a.bal);
+        
+        const html = list.slice(0,10).map((u,i)=>`
+            <div class="ranking-item">
+                <span>${['🥇','🥈','🥉'][i]||i+1+'.'} ${u.name}</span>
+                <span><strong>${u.bal}</strong> moedas</span>
+            </div>
+        `).join('');
+        document.getElementById('ranking').innerHTML = html || '<div class="ranking-item">Ninguém ainda</div>';
+    }
+
+    async function saveConfig() {
+        const cfg = {
+            daily: parseInt(document.getElementById('dailyAmount').value),
+            streakBonus: parseFloat(document.getElementById('streakBonus').value)/100,
+            divorceCost: parseInt(document.getElementById('divorceCost').value),
+            interest: parseFloat(document.getElementById('interestRate').value)/100
+        };
+        await db.ref('config').set(cfg);
+        showMsg('✅ Configurações salvas!', 'success');
+    }
+
+    function updateUI() {
+        if(currentUser) {
+            document.getElementById('balance').textContent = currentUser.balance||0;
+            document.getElementById('streak').textContent = currentUser.streak||0;
+            document.getElementById('married').textContent = currentUser.casado ? 'Sim' : 'Não';
             
-            if (!userId) {
-                showMessage('Digite seu ID do Discord', 'error');
+            if(currentUser.last_daily) {
+                const next = new Date(currentUser.last_daily).getTime() + 86400000;
+                startTimer(Math.max(0,(next-Date.now())/1000));
+            } else startTimer(0);
+        }
+    }
+
+    function startTimer(s) {
+        if(timer) clearInterval(timer);
+        if(s<=0) return document.getElementById('timer').textContent = '✅ Disponível!';
+        
+        timer = setInterval(()=>{
+            if(s<=0) {
+                clearInterval(timer);
+                document.getElementById('timer').textContent = '✅ Disponível!';
                 return;
             }
+            const h=Math.floor(s/3600), m=Math.floor((s%3600)/60), sec=Math.floor(s%60);
+            document.getElementById('timer').textContent = `${h}:${m.toString().padStart(2,'0')}:${sec.toString().padStart(2,'0')}`;
+            s--;
+        },1000);
+    }
 
-            loadBtn.innerHTML = 'Carregando...';
-            loadBtn.disabled = true;
+    function showMsg(t,type) {
+        const m=document.getElementById('message');
+        m.textContent=t; m.className=`message ${type}`; m.style.display='block';
+        setTimeout(()=>m.style.display='none',3000);
+    }
 
-            try {
-                // Buscar usuário do Firebase
-                const snapshot = await database.ref('users/' + userId).once('value');
-                const userData = snapshot.val();
-                
-                if (userData) {
-                    currentUser = {
-                        user_id: userId,
-                        ...userData
-                    };
-                    document.getElementById('username').value = userData.username || '';
-                    showMessage('✅ Usuário carregado!', 'success');
-                } else {
-                    // Criar usuário novo
-                    currentUser = {
-                        user_id: userId,
-                        username: '',
-                        balance: 0,
-                        last_daily: null,
-                        total_earned: 0,
-                        daily_streak: 0
-                    };
-                    showMessage('👤 Novo usuário!', 'info');
-                }
-                
-                updateUI();
-                localStorage.setItem('lastUserId', userId);
-                
-            } catch (error) {
-                console.error('Erro:', error);
-                showMessage('Erro ao carregar usuário', 'error');
-            } finally {
-                loadBtn.innerHTML = 'Carregar';
-                loadBtn.disabled = false;
-            }
-        }
+    function confetti() {
+        for(let i=0;i<20;i++) setTimeout(()=>{
+            const c=document.createElement('div');
+            c.style.cssText=`position:fixed;left:${Math.random()*100}vw;top:-10px;width:10px;height:10px;background:hsl(${Math.random()*360},100%,50%);border-radius:50%;animation:fall ${Math.random()*3+2}s linear`;
+            document.body.appendChild(c);
+            setTimeout(()=>c.remove(),5000);
+        },i*50);
+    }
 
-        async function claimDaily() {
-            if (!currentUser) {
-                showMessage('Carregue um usuário primeiro', 'error');
-                return;
-            }
+    // CSS animação
+    const style=document.createElement('style');
+    style.textContent='@keyframes fall{to{transform:translateY(100vh) rotate(360deg);}}';
+    document.head.appendChild(style);
 
-            const username = document.getElementById('username').value.trim() || currentUser.username || 'Usuário';
-            const claimBtn = document.getElementById('claimBtn');
-            
-            claimBtn.innerHTML = 'Processando...';
-            claimBtn.disabled = true;
-
-            try {
-                const userId = currentUser.user_id;
-                const userRef = database.ref('users/' + userId);
-                const snapshot = await userRef.once('value');
-                let user = snapshot.val() || currentUser;
-                
-                const now = new Date();
-
-                // Verificar se já resgatou hoje
-                if (user.last_daily) {
-                    const lastDaily = new Date(user.last_daily);
-                    const timeDiff = (now - lastDaily) / 1000;
-                    
-                    if (timeDiff < 86400) {
-                        showMessage('⏰ Você já resgatou hoje!', 'error');
-                        startTimer(86400 - timeDiff);
-                        return;
-                    }
-                }
-
-                // Calcular streak
-                let streak = 1;
-                if (user.last_daily) {
-                    const last = new Date(user.last_daily);
-                    const hoursSince = (now - last) / (1000 * 60 * 60);
-                    streak = hoursSince < 48 ? (user.daily_streak || 0) + 1 : 1;
-                }
-
-                // Calcular bônus
-                const bonus = 1 + (Math.min(streak, 7) * 0.1);
-                const amount = Math.floor(DAILY_AMOUNT * bonus);
-
-                // Atualizar usuário
-                const updatedUser = {
-                    ...user,
-                    username: username,
-                    balance: (user.balance || 0) + amount,
-                    last_daily: now.toISOString(),
-                    daily_streak: streak,
-                    total_earned: (user.total_earned || 0) + amount
-                };
-
-                // Salvar no Firebase
-                await userRef.set(updatedUser);
-                
-                // Atualizar currentUser
-                currentUser = {
-                    user_id: userId,
-                    ...updatedUser
-                };
-                
-                updateUI();
-                showMessage(`🎉 Ganhou ${amount} moedas! Streak: ${streak}`, 'success');
-                confettiEffect();
-                
-            } catch (error) {
-                console.error('Erro:', error);
-                showMessage('Erro ao resgatar', 'error');
-            } finally {
-                claimBtn.innerHTML = '🎁 RESGATAR RECOMPENSA DIÁRIA';
-                claimBtn.disabled = false;
-            }
-        }
-
-        async function loadRanking() {
-            try {
-                const snapshot = await database.ref('users').once('value');
-                const usersData = snapshot.val();
-                
-                if (!usersData) {
-                    document.getElementById('rankingList').innerHTML = '<div style="text-align: center;">Nenhum usuário no ranking</div>';
-                    return;
-                }
-
-                // Converter para array
-                const usersList = Object.entries(usersData)
-                    .map(([id, user]) => ({
-                        username: user.username || 'Anônimo',
-                        balance: user.balance || 0
-                    }))
-                    .filter(user => user.username !== 'Anônimo' && user.balance > 0);
-
-                // Ordenar
-                usersList.sort((a, b) => b.balance - a.balance);
-                
-                // Pegar top 10
-                const top10 = usersList.slice(0, 10);
-                
-                if (top10.length === 0) {
-                    document.getElementById('rankingList').innerHTML = '<div style="text-align: center;">Nenhum usuário no ranking</div>';
-                    return;
-                }
-
-                // Renderizar
-                const html = top10.map((user, i) => {
-                    const medal = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `${i+1}.`;
-                    return `
-                        <div class="ranking-item">
-                            <span class="position">${medal}</span>
-                            <span class="username">${user.username}</span>
-                            <span class="balance">💰 ${user.balance}</span>
-                        </div>
-                    `;
-                }).join('');
-                
-                document.getElementById('rankingList').innerHTML = html;
-                
-            } catch (error) {
-                console.error('Erro ranking:', error);
-                document.getElementById('rankingList').innerHTML = '<div style="text-align: center;">Erro ao carregar ranking</div>';
-            }
-        }
-
-        function updateUI() {
-            if (currentUser) {
-                document.getElementById('balance').textContent = currentUser.balance || 0;
-                document.getElementById('streak').textContent = currentUser.daily_streak || 0;
-                document.getElementById('totalEarned').textContent = currentUser.total_earned || 0;
-                
-                if (currentUser.last_daily) {
-                    const last = new Date(currentUser.last_daily);
-                    const next = new Date(last.getTime() + 24*60*60*1000);
-                    const timeLeft = Math.max(0, (next - new Date()) / 1000);
-                    
-                    if (timeLeft > 0) {
-                        startTimer(timeLeft);
-                    } else {
-                        stopTimer();
-                        document.getElementById('timer').textContent = '✅ DISPONÍVEL!';
-                    }
-                } else {
-                    stopTimer();
-                    document.getElementById('timer').textContent = '🎁 PRIMEIRO RESGATE!';
-                }
-            }
-        }
-
-        function startTimer(seconds) {
-            if (timerInterval) clearInterval(timerInterval);
-            
-            function update() {
-                if (seconds <= 0) {
-                    clearInterval(timerInterval);
-                    document.getElementById('timer').textContent = '✅ DISPONÍVEL!';
-                    return;
-                }
-                
-                const h = Math.floor(seconds / 3600);
-                const m = Math.floor((seconds % 3600) / 60);
-                const s = Math.floor(seconds % 60);
-                
-                document.getElementById('timer').textContent = 
-                    `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
-                
-                seconds--;
-            }
-            
-            update();
-            timerInterval = setInterval(update, 1000);
-        }
-
-        function stopTimer() {
-            if (timerInterval) {
-                clearInterval(timerInterval);
-                timerInterval = null;
-            }
-        }
-
-        function showMessage(text, type) {
-            const msg = document.getElementById('message');
-            msg.textContent = text;
-            msg.className = `message ${type}`;
-            msg.style.display = 'block';
-            
-            setTimeout(() => {
-                msg.style.display = 'none';
-            }, 3000);
-        }
-
-        function confettiEffect() {
-            for (let i = 0; i < 20; i++) {
-                setTimeout(() => {
-                    const confetti = document.createElement('div');
-                    confetti.style.position = 'fixed';
-                    confetti.style.left = Math.random() * 100 + 'vw';
-                    confetti.style.top = '-10px';
-                    confetti.style.width = '10px';
-                    confetti.style.height = '10px';
-                    confetti.style.background = `hsl(${Math.random() * 360}, 100%, 50%)`;
-                    confetti.style.borderRadius = '50%';
-                    confetti.style.pointerEvents = 'none';
-                    confetti.style.zIndex = '9999';
-                    confetti.style.animation = `fall ${Math.random() * 3 + 2}s linear`;
-                    document.body.appendChild(confetti);
-                    
-                    setTimeout(() => confetti.remove(), 5000);
-                }, i * 50);
-            }
-        }
-
-        // Adicionar estilo do confete
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes fall {
-                to {
-                    transform: translateY(100vh) rotate(360deg);
-                }
-            }
-        `;
-        document.head.appendChild(style);
-
-        // Auto-carregar ID salvo
-        const savedId = localStorage.getItem('lastUserId');
-        if (savedId) {
-            document.getElementById('userId').value = savedId;
-            setTimeout(loadUser, 500);
-        }
-
-        // Carregar ranking
-        loadRanking();
-        setInterval(loadRanking, 30000);
-    </script>
+    // Carregar
+    const saved = localStorage.getItem('lastId');
+    if(saved) document.getElementById('userId').value = saved;
+    loadRanking();
+    setInterval(loadRanking,30000);
+</script>
 </body>
     </html>
